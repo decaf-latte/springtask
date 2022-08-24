@@ -25,6 +25,7 @@ public class ResponseDto<T> {
       this.success = true;
     } else {
       this.success = false;
+      this.error = new Error(errorCode);
     }
 
     this.data = data;
@@ -36,6 +37,7 @@ public class ResponseDto<T> {
     this.data = data;
     this.error = null;
   }
+  
 
   @Getter
   public static class Error {

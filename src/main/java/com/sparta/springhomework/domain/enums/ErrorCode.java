@@ -11,7 +11,8 @@ public enum ErrorCode {
   NOT_VALID_PASSWORD("NOT_VALID_PASSWORD", "비밀번호 형식이 틀렸습니다."),
   NOT_SAME_PASSWORD("NOT_SAME_PASSWORD", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
   DUPLICATION_NICKNAME("DUPLICATION_NICKNAME", "중복된 닉네임입니다."),
-  NICKNAME_NOT_EXIST("NICKNAME_NOT_EXIST", "사용자를 찾을 수 없습니다.");
+  NICKNAME_NOT_EXIST("NICKNAME_NOT_EXIST", "사용자를 찾을 수 없습니다."),
+  BAD_REQUEST("BAD_REQUEST", "토큰이 유효하지 않습니다.");
 
 
   private final String code;
