@@ -1,6 +1,8 @@
 package com.sparta.springhomework.controller;
 
 
+import com.sparta.springhomework.domain.dto.MemberLogInRequestDto;
+import com.sparta.springhomework.domain.dto.MemberLogInResponseDto;
 import com.sparta.springhomework.domain.dto.MemberSignUpRequestDto;
 import com.sparta.springhomework.domain.dto.MemberSignUpResponseDto;
 import com.sparta.springhomework.domain.dto.ResponseDto;
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
 
-
+//  private final MemberRepository memberRepository;
+  
   private final MemberService memberService;
 
   //회원가입
@@ -41,4 +44,20 @@ public class MemberController {
     return new ResponseDto<>(memberSignUpResponseDto);
   }
 
+  //로그인
+  @PostMapping("/api/member/login")
+  public ResponseDto<MemberLogInResponseDto> login(
+      @RequestBody MemberLogInRequestDto memberLogInRequestDto) {
+    MemberLogInResponseDto memberLogInResponseDto;
+    try {
+      memberLogInResponseDto = memberService.login(memberLogInRequestDto);
+    } catch (CustomException e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, e.getErrorCode());
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
+    }
+    return new ResponseDto<>(memberLogInResponseDto);
+  }
 }
