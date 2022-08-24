@@ -5,7 +5,6 @@ import com.sparta.springhomework.domain.dto.TokenDto;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.RefreshToken;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
-import com.sparta.springhomework.domain.enums.Authority;
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.repository.RefreshTokenRepository;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -38,7 +37,7 @@ public class TokenProvider {
 
   private final Key key;
 
-  private RefreshTokenRepository refreshTokenRepository;
+  private final RefreshTokenRepository refreshTokenRepository;
 
   public TokenProvider(@Value("${jwt.secret}") String secretKey,
       RefreshTokenRepository refreshTokenRepository) {
@@ -52,15 +51,13 @@ public class TokenProvider {
 //    String authorities = authentication.getAuthorities().stream()
 //        .map(GrantedAuthority::getAuthority)
 //        .collect(Collectors.joining(","));
-
     long now = (new Date()).getTime();
 
     // Access Token 생성
     Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
     String accessToken = Jwts.builder()
         .setSubject(member.getNickname())       // payload "sub": "name"
-        .claim(AUTHORITIES_KEY,
-            Authority.ROLE_USER.toString())        // payload "auth": "ROLE_USER"
+        .claim(AUTHORITIES_KEY, member.getAuthority())        // payload "auth": "ROLE_USER"
         .setExpiration(accessTokenExpiresIn)        // payload "exp": 1516239022 (예시)
         .signWith(key, SignatureAlgorithm.HS256)    // header "alg": "HS512"
         .compact();
@@ -107,10 +104,14 @@ public class TokenProvider {
 //    return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 //  }
 
+
+  //스프링 시큐리티- 컨텍스트 홀더안에 저장된 회원정보를 확인하는 것
   public Member getMemberFromAuthentication() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || AnonymousAuthenticationToken.class.
-        isAssignableFrom(authentication.getClass())) {
+
+    if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(
+        authentication.getClass())) {
+
       return null;
     }
     return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
@@ -149,7 +150,7 @@ public class TokenProvider {
   public ResponseDto<?> deleteRefreshToken(Member member) {
     RefreshToken refreshToken = isPresentRefreshToken(member);
     if (null == refreshToken) {
-      return new ResponseDto("", ErrorCode.BAD_REQUEST);
+      return new ResponseDto(ErrorCode.BAD_REQUEST);
     }
 
     refreshTokenRepository.delete(refreshToken);

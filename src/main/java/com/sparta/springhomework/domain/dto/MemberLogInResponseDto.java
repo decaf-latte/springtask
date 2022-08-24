@@ -2,9 +2,16 @@ package com.sparta.springhomework.domain.dto;
 
 import com.sparta.springhomework.domain.entity.Member;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+
+@Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberLogInResponseDto {
 
   private Long id;

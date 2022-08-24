@@ -9,6 +9,7 @@ import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.service.MemberService;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
 //  private final MemberRepository memberRepository;
-  
+
   private final MemberService memberService;
 
   //회원가입
@@ -47,10 +48,10 @@ public class MemberController {
   //로그인
   @PostMapping("/api/member/login")
   public ResponseDto<MemberLogInResponseDto> login(
-      @RequestBody MemberLogInRequestDto memberLogInRequestDto) {
+      @RequestBody MemberLogInRequestDto memberLogInRequestDto, HttpServletResponse response) {
     MemberLogInResponseDto memberLogInResponseDto;
     try {
-      memberLogInResponseDto = memberService.login(memberLogInRequestDto);
+      memberLogInResponseDto = memberService.login(memberLogInRequestDto, response);
     } catch (CustomException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, e.getErrorCode());

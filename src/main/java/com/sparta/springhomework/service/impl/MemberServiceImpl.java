@@ -4,7 +4,10 @@ import com.sparta.springhomework.domain.dto.MemberLogInRequestDto;
 import com.sparta.springhomework.domain.dto.MemberLogInResponseDto;
 import com.sparta.springhomework.domain.dto.MemberSignUpRequestDto;
 import com.sparta.springhomework.domain.dto.MemberSignUpResponseDto;
+import com.sparta.springhomework.domain.dto.ResponseDto;
+import com.sparta.springhomework.domain.dto.TokenDto;
 import com.sparta.springhomework.domain.entity.Member;
+import com.sparta.springhomework.domain.enums.Authority;
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.jwt.TokenProvider;
@@ -13,6 +16,8 @@ import com.sparta.springhomework.service.MemberService;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +45,14 @@ public class MemberServiceImpl implements MemberService {
     //암호화 된 패스워드 세팀
     memberSignUpRequestDto.setPassword(encryptPassword(memberSignUpRequestDto.getPassword()));
 
-    Member member = new Member(memberSignUpRequestDto);
+    Member member = new Member(memberSignUpRequestDto, Authority.ROLE_USER);
+
     member = memberRepository.save(member);
 
     return new MemberSignUpResponseDto(member);
 
   }
+
 
   //회원가입 데이터검증
   private void vaildSignUpData(MemberSignUpRequestDto memberSignUpRequestDto) {
@@ -79,7 +86,8 @@ public class MemberServiceImpl implements MemberService {
 
   //로그인
   @Override
-  public MemberLogInResponseDto login(MemberLogInRequestDto memberLogInRequestDto) {
+  public MemberLogInResponseDto login(MemberLogInRequestDto memberLogInRequestDto,
+      HttpServletResponse response) {
     //회원정보 가져오기 - 없으면 error
     Member member = memberRepository.findByNickname(memberLogInRequestDto.getNickname())
         .orElseThrow(() -> new CustomException(ErrorCode.NICKNAME_NOT_EXIST));
@@ -88,8 +96,31 @@ public class MemberServiceImpl implements MemberService {
     if (!bCryptPasswordEncoder.matches(memberLogInRequestDto.getPassword(), member.getPassword())) {
       throw new CustomException(ErrorCode.NICKNAME_NOT_EXIST);
     }
+
+    TokenDto tokenDto = tokenProvider.generateTokenDto(member);
+    tokenToHeaders(tokenDto, response);
+
     return new MemberLogInResponseDto(member);
   }
+
+  public ResponseDto<?> logout(HttpServletRequest request) {
+    if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+      return new ResponseDto<>(ErrorCode.BAD_REQUEST);
+    }
+    Member member = tokenProvider.getMemberFromAuthentication();
+    if (null == member) {
+      return new ResponseDto<>(ErrorCode.NICKNAME_NOT_EXIST);
+    }
+
+    return tokenProvider.deleteRefreshToken(member);
+  }
+
+  public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
+    response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
+    response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
+    response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+  }
+
 }
 
 

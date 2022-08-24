@@ -39,9 +39,11 @@ public class Member extends Timestamped {
     this.authority = authority;
   }
 
-  public Member(MemberSignUpRequestDto memberSignUpRequestDto) {
+  public Member(MemberSignUpRequestDto memberSignUpRequestDto, Authority authority) {
     this.nickname = memberSignUpRequestDto.getNickname();
     this.password = memberSignUpRequestDto.getPassword();
+    this.authority = authority;
   }
+
 
 }
