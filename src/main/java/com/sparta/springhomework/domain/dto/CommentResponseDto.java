@@ -15,6 +15,8 @@ public class CommentResponseDto {
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
+  private MemberResponseDto member;
+
   public CommentResponseDto(Comment comment) {
     this.id = comment.getId();
     this.postId = comment.getPosting().getId();
@@ -23,5 +25,6 @@ public class CommentResponseDto {
     this.createdAt = comment.getCreatedAt();
     this.modifiedAt = comment.getModifiedAt();
 
+    this.member = new MemberResponseDto(comment.getMember());
   }
 }
