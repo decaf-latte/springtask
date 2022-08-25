@@ -1,5 +1,8 @@
 package com.sparta.springhomework.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.springhomework.domain.dto.ResponseDto;
+import com.sparta.springhomework.domain.enums.ErrorCode;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,10 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
   public void handle(HttpServletRequest request, HttpServletResponse response,
       AccessDeniedException accessDeniedException) throws IOException, ServletException {
     // 필요한 권한이 없이 접근하려 할때 403
-    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+    response.setContentType("application/json;charset=UTF-8");
+    response.getWriter().println(
+        new ObjectMapper().writeValueAsString(
+            new ResponseDto<>(null, ErrorCode.REQUIRE_AUTHORITY)));
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
   }
 }

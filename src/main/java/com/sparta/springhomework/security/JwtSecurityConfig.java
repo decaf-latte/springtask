@@ -24,6 +24,7 @@ public class JwtSecurityConfig extends
   @Override
   public void configure(HttpSecurity httpSecurity) {
     JwtFilter customFilter = new JwtFilter(SECRET_KEY, tokenProvider, userDetailsService);
-    httpSecurity.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+    httpSecurity.addFilterBefore(customFilter,
+        UsernamePasswordAuthenticationFilter.class); // 위의 JwtFilter를 시큐리티 필터 체인의 한 종류인 UsernamePasswordAuthenticationFilter의 순서보다 앞에서 실행 되게 넣어준다.
   }
 }

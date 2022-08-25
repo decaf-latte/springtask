@@ -1,17 +1,20 @@
 package com.sparta.springhomework.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.springhomework.domain.dto.ResponseDto;
+import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.io.IOException;
 import java.security.Key;
-import java.time.Instant;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,52 +53,91 @@ public class JwtFilter extends OncePerRequestFilter {
     Key key = Keys.hmacShaKeyFor(keyBytes);
 
     // 1. Request Header 에서 토큰을 꺼냄
-    String jwt = resolveToken(request);
+    String accessToken = resolveToken(request);
 
     // 2. validateToken 으로 토큰 유효성 검사
     // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
-    if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+    if (StringUtils.hasText(accessToken)) {
       Claims claims;
       try {
-        claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-      } catch (ExpiredJwtException e) {
-        claims = e.getClaims();
-      }
-      //코튼이 유효하지 않을때
-      if (claims.getExpiration().toInstant().toEpochMilli() < Instant.now().toEpochMilli()) {
+        claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken)
+            .getBody();
+      } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+
         response.setContentType("application/json;charset=UTF-8");
-//        response.getWriter().println(
-//            new ObjectMapper().writeValueAsString(
-//                ResponseDto<>(null, ErrorCode.BAD_REQUEST)
-//      )
-//        );
+        response.getWriter().println(
+            new ObjectMapper().writeValueAsString(
+                new ResponseDto<>(null, ErrorCode.BAD_TOKEN)));
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+
+      } catch (ExpiredJwtException e) {
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().println(
+            new ObjectMapper().writeValueAsString(
+                new ResponseDto<>(null, ErrorCode.EXPIRED_TOKEN)));
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+
+      } catch (UnsupportedJwtException e) {
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().println(
+            new ObjectMapper().writeValueAsString(
+                new ResponseDto<>(null, ErrorCode.WRONG_TOKEN)));
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+
       }
 
       String subject = claims.getSubject();
-      Collection<? extends GrantedAuthority> authorities =
-          Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-              .map(SimpleGrantedAuthority::new)
-              .collect(Collectors.toList());
-
       UserDetails principal = userDetailsService.loadUserByUsername(subject);
 
-      Authentication authentication = new UsernamePasswordAuthenticationToken(principal, jwt,
-          authorities);
+      // DB의 member의 role을 가져옴
+      Collection<? extends GrantedAuthority> repoMemberRole = principal.getAuthorities();
+
+      // jwt의 role을 가져옴
+      String jwtRole = claims.get(AUTHORITIES_KEY).toString();
+
+      boolean checkRole = false;
+      for (GrantedAuthority role : repoMemberRole) {
+        if (jwtRole.equals(role.getAuthority())) {
+          checkRole = true;
+        }
+      }
+
+      // db의 role과 jwt의 role 일치하지 않을 때
+      if (!checkRole) {
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().println(
+            new ObjectMapper().writeValueAsString(
+                new ResponseDto<>(null, ErrorCode.NOT_SAME_AUTHORITY)));
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      SimpleGrantedAuthority authority = new SimpleGrantedAuthority(jwtRole);
+      Collection<GrantedAuthority> authorities = new ArrayList<>();
+      authorities.add(authority);
+
+      Authentication authentication =
+          new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    filterChain.doFilter(request, response);
-
+    filterChain.doFilter(request, response); // 시큐리티 체인이기 때문에 해당 메소드 종료 시에는 이 명령어를 사용해야한다.
   }
 
 
   // Request Header 에서 토큰 정보를 꺼내오기
   private String resolveToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
       return bearerToken.substring(7);
     }
+
     return null;
   }
 }

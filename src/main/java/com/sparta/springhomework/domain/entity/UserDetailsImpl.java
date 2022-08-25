@@ -1,6 +1,5 @@
 package com.sparta.springhomework.domain.entity;
 
-import com.sparta.springhomework.domain.enums.Authority;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,12 @@ public class UserDetailsImpl implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Authority.ROLE_USER.toString());
+    // enum의 이름을 String으로 가져 오고 싶으면 .name()을 사용해서 가져온다.
+    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(
+        this.member.getAuthority().name());
+
     Collection<GrantedAuthority> authorities = new ArrayList<>();
+
     authorities.add(authority);
     return authorities;
   }

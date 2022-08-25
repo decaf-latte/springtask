@@ -19,10 +19,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<Member> member = memberRepository.findByNickname(username);
-    return member
-        .map(UserDetailsImpl::new)
-        .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+    Optional<Member> optionalMember = memberRepository.findByNickname(username);
+
+    if (optionalMember.isPresent()) {
+      Member member = optionalMember.get();
+      return new UserDetailsImpl(member);
+    }
+
+    throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
+
+//    return member
+//        .map(UserDetailsImpl::new)
+//        .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
   }
 }
 

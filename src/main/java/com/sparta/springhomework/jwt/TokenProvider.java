@@ -3,10 +3,10 @@ package com.sparta.springhomework.jwt;
 import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.dto.TokenDto;
 import com.sparta.springhomework.domain.entity.Member;
-import com.sparta.springhomework.domain.entity.RefreshToken;
+import com.sparta.springhomework.domain.entity.TokenStore;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.repository.RefreshTokenRepository;
+import com.sparta.springhomework.repository.TokenStoreRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -37,11 +37,11 @@ public class TokenProvider {
 
   private final Key key;
 
-  private final RefreshTokenRepository refreshTokenRepository;
+  private final TokenStoreRepository tokenStoreRepository;
 
   public TokenProvider(@Value("${jwt.secret}") String secretKey,
-      RefreshTokenRepository refreshTokenRepository) {
-    this.refreshTokenRepository = refreshTokenRepository;
+      TokenStoreRepository tokenStoreRepository) {
+    this.tokenStoreRepository = tokenStoreRepository;
     byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     this.key = Keys.hmacShaKeyFor(keyBytes);
   }
@@ -55,6 +55,7 @@ public class TokenProvider {
 
     // Access Token 생성
     Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+
     String accessToken = Jwts.builder()
         .setSubject(member.getNickname())       // payload "sub": "name"
         .claim(AUTHORITIES_KEY, member.getAuthority())        // payload "auth": "ROLE_USER"
@@ -68,13 +69,8 @@ public class TokenProvider {
         .signWith(key, SignatureAlgorithm.HS256)
         .compact();
 
-    RefreshToken refreshTokenObject = RefreshToken.builder()
-        .id(member.getId())
-        .member(member)
-        .value(refreshToken)
-        .build();
-
-    refreshTokenRepository.save(refreshTokenObject);
+    TokenStore tokenStore = new TokenStore(member, refreshToken);
+    tokenStoreRepository.save(tokenStore);
 
     return TokenDto.builder()
         .grantType(BEARER_TYPE)
@@ -141,19 +137,19 @@ public class TokenProvider {
 //    }
 //  }
   @Transactional(readOnly = true)
-  public RefreshToken isPresentRefreshToken(Member member) {
-    Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
+  public TokenStore isPresentRefreshToken(Member member) {
+    Optional<TokenStore> optionalRefreshToken = tokenStoreRepository.findByMember(member);
     return optionalRefreshToken.orElse(null);
   }
 
   @Transactional
   public ResponseDto<?> deleteRefreshToken(Member member) {
-    RefreshToken refreshToken = isPresentRefreshToken(member);
-    if (null == refreshToken) {
+    TokenStore tokenStore = isPresentRefreshToken(member);
+    if (null == tokenStore) {
       return new ResponseDto(ErrorCode.BAD_REQUEST);
     }
 
-    refreshTokenRepository.delete(refreshToken);
+    tokenStoreRepository.delete(tokenStore);
     return new ResponseDto("삭제");
   }
 

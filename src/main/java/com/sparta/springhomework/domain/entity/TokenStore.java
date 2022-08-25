@@ -3,40 +3,33 @@ package com.sparta.springhomework.domain.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
-public class RefreshToken extends Timestamped {
+public class TokenStore extends Timestamped {
 
   @Id
-  @Column(nullable = false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
 
-  @Column(name = "token_value", nullable = false)
-  private String value;
+  // TEXT -> DB의 데이터 타입으로 varchar(String) 보다 더 큰 데이터를 저장할 수 있다.
+  @Column(name = "refresh_token", columnDefinition = "TEXT", nullable = false)
+  private String refreshToken;
 
-  public void setMember(Member member) {
+  public TokenStore(Member member, String refreshToken) {
     this.member = member;
+    this.refreshToken = refreshToken;
   }
-
-  public void updateValue(String token) {
-    this.value = token;
-  }
-
-
 }

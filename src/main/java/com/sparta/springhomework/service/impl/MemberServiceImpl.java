@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
     vaildSignUpData(memberSignUpRequestDto);
     //동일한 nickname 있는 지 확인
     checkDuplicationNickname(memberSignUpRequestDto.getNickname());
-    //암호화 된 패스워드 세팀
+    //암호화 된 패스워드 세팅
     memberSignUpRequestDto.setPassword(encryptPassword(memberSignUpRequestDto.getPassword()));
 
     Member member = new Member(memberSignUpRequestDto, Authority.ROLE_USER);
