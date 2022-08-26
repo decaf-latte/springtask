@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
+//@Access(AccessType.PROPERTY)
 public class Posting extends Timestamped {
 
   // ID가 자동으로 생성 및 증가합니다.
@@ -36,12 +37,6 @@ public class Posting extends Timestamped {
   @Column(nullable = false)
   private String content;
 
-  @Column(nullable = false)
-  private String author;
-
-  @JsonIgnore
-  @Column(nullable = false)
-  private String password;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
@@ -58,8 +53,6 @@ public class Posting extends Timestamped {
   public Posting(PostingRequestDto postingRequestDto, Member member) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
-    this.author = postingRequestDto.getAuthor();
-    this.password = postingRequestDto.getPassword();
     this.member = member;
   }
 
@@ -67,8 +60,6 @@ public class Posting extends Timestamped {
   public void update(PostingRequestDto postingRequestDto) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
-    this.author = postingRequestDto.getAuthor();
-    this.password = postingRequestDto.getPassword();
   }
 
 }

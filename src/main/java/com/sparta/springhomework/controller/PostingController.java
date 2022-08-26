@@ -1,6 +1,7 @@
 package com.sparta.springhomework.controller;
 
-import com.sparta.springhomework.domain.dto.PostPostingResponseDto;
+import com.sparta.springhomework.domain.dto.PostingDetailResponseDto;
+import com.sparta.springhomework.domain.dto.PostingListResponseDto;
 import com.sparta.springhomework.domain.dto.PostingRequestDto;
 import com.sparta.springhomework.domain.dto.PostingResponseDto;
 import com.sparta.springhomework.domain.dto.ResponseDto;
@@ -8,9 +9,9 @@ import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.PostingRepository;
 import com.sparta.springhomework.service.PostingService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,95 +31,75 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostingController {
 
   private final PostingRepository postingRepository;
+
   private final PostingService postingService;
 
   //전체조회
   @GetMapping("/api/post")
-  public ResponseDto<List<PostingResponseDto>> getPosting() {
-    List<PostingResponseDto> data;
+  public ResponseDto<List<PostingListResponseDto>> getAll() {
+    List<PostingListResponseDto> data;
+
     try {
-      List<Posting> postings = postingRepository.findAllByOrderByModifiedAtDesc();
-
-      data = new ArrayList<>();
-
-      for (Posting posting : postings) {
-        PostingResponseDto postingResponseDto = new PostingResponseDto(posting);
-        data.add(postingResponseDto);
-      }
-
+      data = postingService.getAll();
     } catch (Exception e) {
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
     }
     return new ResponseDto<>(data);
   }
 
-  //게시글 조회
-  @GetMapping("/api/post/{id}")
-  public ResponseDto<PostingResponseDto> getPosting(@PathVariable Long id) {
-    PostingResponseDto postingResponseDto;
-    try {
-      postingResponseDto = postingService.findById(id);
-    } catch (EntityNotFoundException e) {
-      log.error(e.getMessage());
-      return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);
-    } catch (Exception e) {
-      log.error(e.getMessage());
-      return new ResponseDto<PostingResponseDto>(null, ErrorCode.ENTITY_NOT_FOUND);
-    }
-
-    return new ResponseDto<PostingResponseDto>(postingResponseDto);
-  }
-
   //게시글 작성
-  @PostMapping("/api/post")//리스폰스디티오 따로 ..리턴되는 데이터값이다름.
-  public ResponseDto<PostPostingResponseDto> createPosting(
+  @PostMapping("/api/auth/post")
+  public ResponseDto<PostingResponseDto> create(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestBody PostingRequestDto requestDto) {
-    PostPostingResponseDto postPostingResponseDto;
+
+    PostingResponseDto postPostingResponseDto;
 
     try {
       Member member = userDetails.getMember();
       Posting posting = new Posting(requestDto, member); //작성 데이터 받음
       posting = postingRepository.save(posting); // 작성데이터+메모리저장 ID추가됨
-      postPostingResponseDto = new PostPostingResponseDto(posting);
+      postPostingResponseDto = new PostingResponseDto(posting);
 
     } catch (Exception e) {
+      log.error("error: ", e);
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
     }
     return new ResponseDto<>(postPostingResponseDto);
 
   }
 
-  //게시글 비밀번호 확인(비교)//..??
-  @PostMapping("/api/post/{id}")//comparepassword 로직 리턴 값이 boolean이기때문에 값을 받아주는 변수를 data
-  public ResponseDto<Boolean> comparePassword(@PathVariable Long id,
-      @RequestBody PostingRequestDto.PostingPasswordDto postingPasswordDto) {
-    boolean data;
-    try {//기본 템플렛
-      data = postingService.comparePassword(id, postingPasswordDto);
-    } catch (EntityNotFoundException e) {//아이디 못찾을때 에러를 미리 지정을 했으므로 해당 에러를 감지하여 먼저 가져옴
-      log.error(e.getMessage());//에러메세지 로그에 띄움
+  //게시글 조회
+  @GetMapping("/api/post/{id}")
+  public ResponseDto<PostingDetailResponseDto> getPosting(@PathVariable Long id) {
+    PostingDetailResponseDto postingDetailResponseDto;
+    try {
+      postingDetailResponseDto = postingService.findById(id);
+    } catch (EntityNotFoundException e) {
+      log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);
-    } catch (Exception e) {//나머지 에러들
-      log.error(e.getMessage());//에러메세지 로그에 띄움
-      return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);
     }
-    return new ResponseDto<>(data);
+    ResponseDto<PostingDetailResponseDto> responseDto = new ResponseDto<>(postingDetailResponseDto);
+
+    return new ResponseDto<>(postingDetailResponseDto);
   }
+
 
   //게시글 수정
   @PutMapping("/api/post/{id}")//리턴값이 게시글 작성과 같음..
-  public ResponseDto<PostPostingResponseDto> updatePosting(@PathVariable Long id,
+  public ResponseDto<PostingResponseDto> updatePosting(@PathVariable Long id,
       @RequestBody PostingRequestDto requestDto) {
-    PostPostingResponseDto postPostingResponseDto;
-
+    PostingResponseDto postPostingResponseDto;
     try {
-      Posting posting = postingService.update(id, requestDto);
-      postPostingResponseDto = new PostPostingResponseDto(posting);
+      postPostingResponseDto = postingService.update(id, requestDto);
 
-    } catch (EntityNotFoundException e) {//아이디 못찾을때 에러를 미리 지정을 했으므로 해당 에러를 감지하여 먼저 가져옴
+    } catch (CustomException e) {//아이디 못찾을때 에러를 미리 지정을 했으므로 해당 에러를 감지하여 먼저 가져옴
       log.error(e.getMessage());//에러메세지 로그에 띄움
-      return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);
+      return new ResponseDto<>(null, e.getErrorCode());
+
     } catch (Exception e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
@@ -131,9 +112,12 @@ public class PostingController {
   public ResponseDto<String> deletePosting(@PathVariable Long id) {
     try {
       postingService.delete(id);
+    } catch (CustomException e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, e.getErrorCode());
     } catch (Exception e) {
-      String data = "false";
-      return new ResponseDto<>(data, ErrorCode.ENTITY_NOT_FOUND);
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
     }
     String data = "delete success";
 
