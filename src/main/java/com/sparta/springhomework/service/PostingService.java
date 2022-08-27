@@ -5,6 +5,7 @@ import com.sparta.springhomework.domain.dto.PostingListResponseDto;
 import com.sparta.springhomework.domain.dto.PostingRequestDto;
 import com.sparta.springhomework.domain.dto.PostingResponseDto;
 import com.sparta.springhomework.domain.entity.Member;
+import com.sparta.springhomework.domain.entity.Posting;
 import java.util.List;
 
 public interface PostingService {
@@ -19,6 +20,8 @@ public interface PostingService {
 
   void delete(Long id);
 
-  PostingDetailResponseDto findById(Long id);
+  PostingDetailResponseDto getById(Long id);
+
+  Posting findById(Long id);
 
 }

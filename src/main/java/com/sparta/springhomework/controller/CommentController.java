@@ -9,6 +9,7 @@ import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.service.CommentService;
 import com.sparta.springhomework.service.PostingService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,8 +33,10 @@ public class CommentController {
   public ResponseDto<CommentResponseDto> create(@RequestBody CommentRequestDto commentRequestDto) {
     CommentResponseDto commentResponseDto;
     try {
-      Posting posting = postingService.get(commentRequestDto.getPostId());
+
+      Posting posting = postingService.findById(commentRequestDto.getPostId());
       commentResponseDto = commentService.create(commentRequestDto, posting);
+
     } catch (CustomException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, e.getErrorCode());
@@ -44,10 +47,10 @@ public class CommentController {
     return new ResponseDto<>(commentResponseDto);
   }
 
-  //댓글조회
-  @GetMapping("/api/comment/{id}")
-  public ResponseDto<CommentResponseDto> get(@PathVariable Long id) {
-    CommentResponseDto commentResponseDto;
+  //댓글 목록 조회
+  @GetMapping("/api/comment/{id}") //post id 입력
+  public ResponseDto<List<CommentResponseDto>> get(@PathVariable Long id) {
+    List<CommentResponseDto> commentResponseDto;
     try {
       commentResponseDto = commentService.get(id);
     } catch (CustomException e) {
@@ -61,16 +64,19 @@ public class CommentController {
   }
 
   //댓글수정
-  @PutMapping("/api/comment/{id}")
+  @PutMapping("/api/auth/comment/{id}")
   public ResponseDto<CommentResponseDto> update(@PathVariable Long id,
       @RequestBody CommentRequestDto commentRequestDto) {
     CommentResponseDto commentResponseDto;
+
     try {
-      Posting posting = postingService.get(commentRequestDto.getPostId());
-      commentResponseDto = commentService.update(id, commentRequestDto, posting);
+      Posting posting = postingService.findById(commentRequestDto.getPostId());
+      commentResponseDto = commentService.create(commentRequestDto, posting);
+
     } catch (CustomException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, e.getErrorCode());
+
     } catch (Exception e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
@@ -81,8 +87,8 @@ public class CommentController {
 
 
   //댓글삭제
-  @DeleteMapping("/api/comment/{id}")
-  public ResponseDto<Boolean> delete(@PathVariable Long id) {
+  @DeleteMapping("/api/auth/comment/{id}")
+  public ResponseDto<String> delete(@PathVariable Long id) {
     try {
       commentService.delete(id);
     } catch (CustomException e) {
@@ -92,8 +98,9 @@ public class CommentController {
       log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
     }
+    String data = "delete success";
 
-    return new ResponseDto<>(true);
+    return new ResponseDto<>(data);
   }
 
 }

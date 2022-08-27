@@ -8,6 +8,7 @@ import com.sparta.springhomework.domain.dto.MemberSignUpResponseDto;
 import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.exception.CustomException;
+import com.sparta.springhomework.repository.MemberRepository;
 import com.sparta.springhomework.service.MemberService;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
 
-//  private final MemberRepository memberRepository;
+  private final MemberRepository memberRepository;
 
   private final MemberService memberService;
 

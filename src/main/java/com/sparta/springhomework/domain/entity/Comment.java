@@ -37,13 +37,11 @@ public class Comment extends Timestamped {
   private Member member;
 
   public Comment(CommentRequestDto commentRequestDto, Posting posting, Member member) {
-    this.author = posting.getAuthor();
+    this.author = member.getNickname();
     this.content = commentRequestDto.getContent();
     this.posting = posting;
     this.member = member;
   }
-  
-//  API 명세서 확인하면서 출력값 맞는지 확인하기
 
 
 }

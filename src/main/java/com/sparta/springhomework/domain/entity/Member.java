@@ -16,12 +16,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 @Table(name = "member")
 public class Member extends Timestamped {
 
@@ -55,4 +57,26 @@ public class Member extends Timestamped {
     this.password = memberSignUpRequestDto.getPassword();
     this.authority = authority;
   }
+
+  //해쉬코드 값 비교
+
+//  @Override
+//  public boolean equals(Object o) {
+//    if (this == o) {
+//      return true;
+//    }
+//    if (o == null || getClass() != o.getClass()) {
+//      return false;
+//    }
+//    Member member = (Member) o;
+//    return Objects.equals(id, member.id) && Objects.equals(nickname,
+//        member.nickname) && Objects.equals(password, member.password)
+//        && authority == member.authority && Objects.equals(postings, member.postings)
+//        && Objects.equals(comments, member.comments);
+//  }
+//
+//  @Override
+//  public int hashCode() {
+//    return Objects.hash(id, nickname, password, authority, postings, comments);
+//  }
 }

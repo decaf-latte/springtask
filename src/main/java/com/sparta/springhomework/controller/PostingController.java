@@ -74,7 +74,7 @@ public class PostingController {
   public ResponseDto<PostingDetailResponseDto> getPosting(@PathVariable Long id) {
     PostingDetailResponseDto postingDetailResponseDto;
     try {
-      postingDetailResponseDto = postingService.findById(id);
+      postingDetailResponseDto = postingService.getById(id);
     } catch (EntityNotFoundException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);

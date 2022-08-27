@@ -20,11 +20,10 @@ public class CommentResponseDto {
   public CommentResponseDto(Comment comment) {
     this.id = comment.getId();
     this.postId = comment.getPosting().getId();
-    this.author = comment.getAuthor();
+    this.author = comment.getMember().getNickname();
     this.content = comment.getContent();
     this.createdAt = comment.getCreatedAt();
     this.modifiedAt = comment.getModifiedAt();
 
-    this.member = new MemberResponseDto(comment.getMember());
   }
 }

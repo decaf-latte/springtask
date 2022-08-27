@@ -51,8 +51,8 @@ public class PostingServiceImpl implements PostingService {
   @Override
   @Transactional
   public PostingResponseDto update(Long id, PostingRequestDto postingRequestDto) {
-    Posting posting = postingRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+    Posting posting = postingRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
 
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
@@ -86,9 +86,18 @@ public class PostingServiceImpl implements PostingService {
     postingRepository.deleteById(id);
   }
 
-  public PostingDetailResponseDto findById(Long id) {
+  @Override
+  public PostingDetailResponseDto getById(Long id) {
     Posting posting = postingRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
     return new PostingDetailResponseDto(posting);
+  }
+  
+
+  @Override
+  public Posting findById(Long id) {
+    Posting posting = postingRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+    return posting;
   }
 }

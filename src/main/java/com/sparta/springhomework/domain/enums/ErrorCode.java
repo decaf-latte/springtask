@@ -6,6 +6,8 @@ import lombok.Getter;
 public enum ErrorCode {
 
   ENTITY_NOT_FOUND("NOT_FOUND", "데이터가 존재하지 않습니다."),
+  POSTING_ID_NOT_FOUND("POSTING_ID_NOT_FOUND", "게시글이 존재하지 않습니다."),
+  COMMENT_NOT_FOUND("COMMENT_NOT_FOUND", "댓글이 존재하지 않습니다."),
   INVALID_ERROR("INVALID_ERROR", "에러 발생"),
   NOT_VALID_NICKNAME("NOT_VALID_NICKNAME", "닉네임 형식이 틀렸습니다."),
   NOT_VALID_PASSWORD("NOT_VALID_PASSWORD", "비밀번호 형식이 틀렸습니다."),
