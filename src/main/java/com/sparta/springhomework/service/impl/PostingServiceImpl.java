@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.Objects;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PostingServiceImpl implements PostingService {
@@ -26,7 +27,6 @@ public class PostingServiceImpl implements PostingService {
   private final PostingRepository postingRepository;
 
   //전체 조회 (목록)
-
   public List<PostingListResponseDto> getAll() {
     return postingRepository.findAllByOrderByModifiedAtDesc();
   }
@@ -39,7 +39,7 @@ public class PostingServiceImpl implements PostingService {
     return new PostingResponseDto(posting);
   }
 
-  //게시글 상세조회
+  //TODO:게시글 상세조회
   @Override
   public PostingDetailResponseDto getPosting(Long id) {
     Posting posting = postingRepository.findById(id)
@@ -86,13 +86,14 @@ public class PostingServiceImpl implements PostingService {
     postingRepository.deleteById(id);
   }
 
+
   @Override
   public PostingDetailResponseDto getById(Long id) {
     Posting posting = postingRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
     return new PostingDetailResponseDto(posting);
   }
-  
+
 
   @Override
   public Posting findById(Long id) {

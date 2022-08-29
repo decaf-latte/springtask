@@ -1,9 +1,10 @@
 package com.sparta.springhomework.domain.dto;
 
+
 import lombok.Getter;
 
 @Getter
-public class CommentRequestDto {
+public class CommentUpdateRequestDto {
 
   private Long postId;
   private String content;

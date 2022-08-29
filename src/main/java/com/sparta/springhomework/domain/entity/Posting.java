@@ -3,8 +3,8 @@ package com.sparta.springhomework.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.springhomework.domain.dto.PostingRequestDto;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,8 +46,10 @@ public class Posting extends Timestamped {
   // 조회 시 즉시 로딩(EAGER) 을 통해 한 번에 모든 comment를 가져온다.
   // cascade -> 삭제 업데이트 등 상태 변경 시 연관관계에 있는 데이터에도 변경 전파 옵션 (나중에 프로젝트 할 때 옵션 찾아본다)
   // / 삭제 시 comment도 삭제 되게 조치
-  @OneToMany(mappedBy = "posting", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  private List<Comment> comments = new ArrayList<>();
+  // OneToMany의 기본 fetch type -> LAZY
+  // ManyToOne -> EAGER
+  @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private Set<Comment> comments = new HashSet<>();
 
   //게시글 작성시
   public Posting(PostingRequestDto postingRequestDto, Member member) {

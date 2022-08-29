@@ -1,7 +1,11 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.dto.CommentRequestDto;
+import com.sparta.springhomework.domain.dto.CommentCreateRequestDto;
+import com.sparta.springhomework.domain.dto.CommentUpdateRequestDto;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,11 +41,20 @@ public class Comment extends Timestamped {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  public Comment(CommentRequestDto commentRequestDto, Posting posting, Member member) {
+  @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private Set<Reply> replies = new HashSet<>();
+
+  public Comment(CommentCreateRequestDto commentRequestDto, Posting posting, Member member) {
     this.author = member.getNickname();
     this.content = commentRequestDto.getContent();
     this.posting = posting;
     this.member = member;
+  }
+
+  // update이므로 생성자가 아닌 일반 메소드를 이용한다.
+  public void update(CommentUpdateRequestDto commentUpdateRequestDto, Posting posting) {
+    this.content = commentUpdateRequestDto.getContent();
+    this.posting = posting;
   }
 
 

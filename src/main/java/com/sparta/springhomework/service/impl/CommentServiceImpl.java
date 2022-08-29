@@ -1,7 +1,8 @@
 package com.sparta.springhomework.service.impl;
 
-import com.sparta.springhomework.domain.dto.CommentRequestDto;
+import com.sparta.springhomework.domain.dto.CommentCreateRequestDto;
 import com.sparta.springhomework.domain.dto.CommentResponseDto;
+import com.sparta.springhomework.domain.dto.CommentUpdateRequestDto;
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
@@ -14,11 +15,13 @@ import com.sparta.springhomework.service.CommentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.transaction.Transactional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -32,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
   //댓글 작성
   @Override
   @Transactional
-  public CommentResponseDto create(CommentRequestDto commentRequestDto,
+  public CommentResponseDto create(CommentCreateRequestDto commentRequestDto,
       Posting posting) {
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
@@ -50,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
     Posting posting = postingRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
 
-    List<Comment> comments = posting.getComments();
+    Set<Comment> comments = posting.getComments();
 
     List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 
@@ -65,7 +68,9 @@ public class CommentServiceImpl implements CommentService {
 
   //댓글 수정
   @Override
-  public CommentResponseDto update(Long id, CommentRequestDto commentRequestDto, Posting posting) {
+  @Transactional
+  public CommentResponseDto update(Long id, CommentUpdateRequestDto commentUpdateRequestDto,
+      Posting posting) {
     Comment comment = commentRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
@@ -77,13 +82,39 @@ public class CommentServiceImpl implements CommentService {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
 
+    comment.update(commentUpdateRequestDto, posting);
     return new CommentResponseDto(comment);
   }
 
   //댓글삭제
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void delete(Long id) {
+//    Comment comment = commentRepository.findById(id)
+//        .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+//
+//    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+//        .getAuthentication().getPrincipal();
+//
+//    Member currentMember = userDetails.getMember();
+//
+//    if (!Objects.equals(comment.getMember().getId(), currentMember.getId())) {
+//      throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
+//    }
+
+    commentRepository.deleteById(id);
+  }
+
+  public Comment findById(Long id) {
+    Comment comment = commentRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+    return comment;
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public void checkMember(Long id) {
+
     Comment comment = commentRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
@@ -95,6 +126,5 @@ public class CommentServiceImpl implements CommentService {
     if (!Objects.equals(comment.getMember().getId(), currentMember.getId())) {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
-    commentRepository.deleteById(id);
   }
 }

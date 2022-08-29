@@ -23,6 +23,8 @@ public class PostingDetailResponseDto extends Timestamped {
 
   private List<CommentResponseDto> comments = new ArrayList<>();
 
+  private List<ReplyResponseDto> replies = new ArrayList<>();
+
   public PostingDetailResponseDto(Posting posting) {
     this.createdAt = posting.getCreatedAt();
     this.modifiedAt = posting.getModifiedAt();

@@ -6,11 +6,9 @@ import com.sparta.springhomework.domain.dto.PostingRequestDto;
 import com.sparta.springhomework.domain.dto.PostingResponseDto;
 import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.entity.Member;
-import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.exception.CustomException;
-import com.sparta.springhomework.repository.PostingRepository;
 import com.sparta.springhomework.service.PostingService;
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController//필수
 public class PostingController {
 
-  private final PostingRepository postingRepository;
 
   private final PostingService postingService;
 
@@ -51,21 +48,19 @@ public class PostingController {
   @PostMapping("/api/auth/post")
   public ResponseDto<PostingResponseDto> create(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody PostingRequestDto requestDto) {
+      @RequestBody PostingRequestDto postingRequestDto) {
 
-    PostingResponseDto postPostingResponseDto;
+    PostingResponseDto postingResponseDto;
 
     try {
       Member member = userDetails.getMember();
-      Posting posting = new Posting(requestDto, member); //작성 데이터 받음
-      posting = postingRepository.save(posting); // 작성데이터+메모리저장 ID추가됨
-      postPostingResponseDto = new PostingResponseDto(posting);
+      postingResponseDto = postingService.create(postingRequestDto, member);
 
     } catch (Exception e) {
       log.error("error: ", e);
       return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
     }
-    return new ResponseDto<>(postPostingResponseDto);
+    return new ResponseDto<>(postingResponseDto);
 
   }
 
@@ -82,8 +77,6 @@ public class PostingController {
       log.error(e.getMessage());
       return new ResponseDto<>(null, ErrorCode.ENTITY_NOT_FOUND);
     }
-    ResponseDto<PostingDetailResponseDto> responseDto = new ResponseDto<>(postingDetailResponseDto);
-
     return new ResponseDto<>(postingDetailResponseDto);
   }
 

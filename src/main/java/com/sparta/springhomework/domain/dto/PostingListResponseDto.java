@@ -18,8 +18,10 @@ public class PostingListResponseDto {
   private String content;
   private MemberResponseDto member;
 
-
+  private Comment comment;
   private List<CommentResponseDto> comments = new ArrayList<>();
+
+  private List<ReplyResponseDto> replies = new ArrayList<>();
 
   public PostingListResponseDto(Posting posting) {
     this.id = posting.getId();
@@ -32,5 +34,11 @@ public class PostingListResponseDto {
       CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
       comments.add(commentResponseDto);
     }
+
+//    //replyResponseDto를 받아온다
+//    for (Reply reply : comment.getReplies()) {
+//      ReplyResponseDto replyResponseDto = new ReplyResponseDto(reply);
+//      replies.add(replyResponseDto);
+//    }
   }
 }
