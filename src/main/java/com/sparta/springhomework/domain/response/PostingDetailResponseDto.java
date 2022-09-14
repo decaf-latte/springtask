@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.response;
 
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Posting;

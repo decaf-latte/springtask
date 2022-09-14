@@ -43,6 +43,9 @@ dependencies {
     //validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //Swagger setting
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+//3.0.0 버전에서는 /swagger-ui/index.html로 접속해야 정상적으로 페이지가 출력된다.
 
 }
 

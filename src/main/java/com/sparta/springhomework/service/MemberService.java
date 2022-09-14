@@ -1,9 +1,9 @@
 package com.sparta.springhomework.service;
 
-import com.sparta.springhomework.domain.dto.MemberLogInRequestDto;
-import com.sparta.springhomework.domain.dto.MemberLogInResponseDto;
-import com.sparta.springhomework.domain.dto.MemberSignUpRequestDto;
-import com.sparta.springhomework.domain.dto.MemberSignUpResponseDto;
+import com.sparta.springhomework.domain.request.MemberLogInRequestDto;
+import com.sparta.springhomework.domain.request.MemberSignUpRequestDto;
+import com.sparta.springhomework.domain.response.MemberLogInResponseDto;
+import com.sparta.springhomework.domain.response.MemberSignUpResponseDto;
 import javax.servlet.http.HttpServletResponse;
 
 

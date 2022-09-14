@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.response;
 
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Posting;
@@ -18,7 +18,6 @@ public class PostingListResponseDto {
   private String content;
   private MemberResponseDto member;
 
-  private Comment comment;
   private List<CommentResponseDto> comments = new ArrayList<>();
 
   private List<ReplyResponseDto> replies = new ArrayList<>();
@@ -35,10 +34,5 @@ public class PostingListResponseDto {
       comments.add(commentResponseDto);
     }
 
-//    //replyResponseDto를 받아온다
-//    for (Reply reply : comment.getReplies()) {
-//      ReplyResponseDto replyResponseDto = new ReplyResponseDto(reply);
-//      replies.add(replyResponseDto);
-//    }
   }
 }

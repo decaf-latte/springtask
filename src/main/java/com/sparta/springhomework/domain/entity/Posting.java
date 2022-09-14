@@ -2,9 +2,9 @@ package com.sparta.springhomework.domain.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.springhomework.domain.dto.PostingRequestDto;
-import java.util.HashSet;
-import java.util.Set;
+import com.sparta.springhomework.domain.request.PostingRequestDto;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Posting extends Timestamped {
 
   // ID가 자동으로 생성 및 증가합니다.
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
   private Long id;
 
@@ -48,8 +48,8 @@ public class Posting extends Timestamped {
   // / 삭제 시 comment도 삭제 되게 조치
   // OneToMany의 기본 fetch type -> LAZY
   // ManyToOne -> EAGER
-  @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE, orphanRemoval = true)
-  private Set<Comment> comments = new HashSet<>();
+  @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)//, orphanRemoval = true)
+  private List<Comment> comments = new ArrayList<>();
 
   //게시글 작성시
   public Posting(PostingRequestDto postingRequestDto, Member member) {

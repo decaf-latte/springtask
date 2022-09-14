@@ -1,10 +1,11 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.request;
 
 
 import lombok.Getter;
 
 @Getter
-public class ReplyCreateRequestDto {
+public class ReplyUpdateRequestDto {
+
 
   private Long commentId;
   private String content;

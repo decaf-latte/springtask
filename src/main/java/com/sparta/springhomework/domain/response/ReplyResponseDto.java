@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.response;
 
 
 import com.sparta.springhomework.domain.entity.Reply;
@@ -19,7 +19,7 @@ public class ReplyResponseDto {
   private LocalDateTime createdAt;
 
   private LocalDateTime modifiedAt;
-  
+
 
   public ReplyResponseDto(Reply reply) {
     this.id = reply.getId();

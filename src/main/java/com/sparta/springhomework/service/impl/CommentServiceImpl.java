@@ -1,13 +1,13 @@
 package com.sparta.springhomework.service.impl;
 
-import com.sparta.springhomework.domain.dto.CommentCreateRequestDto;
-import com.sparta.springhomework.domain.dto.CommentResponseDto;
-import com.sparta.springhomework.domain.dto.CommentUpdateRequestDto;
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.domain.request.CommentCreateRequestDto;
+import com.sparta.springhomework.domain.request.CommentUpdateRequestDto;
+import com.sparta.springhomework.domain.response.CommentResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.CommentRepository;
 import com.sparta.springhomework.repository.PostingRepository;
@@ -15,7 +15,6 @@ import com.sparta.springhomework.service.CommentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,8 +51,8 @@ public class CommentServiceImpl implements CommentService {
   public List<CommentResponseDto> get(Long id) {
     Posting posting = postingRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
-
-    Set<Comment> comments = posting.getComments();
+//TODO
+    List<Comment> comments = posting.getComments();
 
     List<CommentResponseDto> commentResponseDtos = new ArrayList<>();
 

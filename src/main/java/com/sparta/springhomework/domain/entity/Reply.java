@@ -1,8 +1,8 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.dto.ReplyCreateRequestDto;
-import com.sparta.springhomework.domain.dto.ReplyUpdateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyCreateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyUpdateRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Reply extends Timestamped {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(columnDefinition = "TEXT") // DB의 컬럼 속성을 TEXT로 바꿔서 기본 varchar 보다 많은 데이터를 저장

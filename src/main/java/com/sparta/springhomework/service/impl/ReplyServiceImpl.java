@@ -1,13 +1,13 @@
 package com.sparta.springhomework.service.impl;
 
-import com.sparta.springhomework.domain.dto.ReplyCreateRequestDto;
-import com.sparta.springhomework.domain.dto.ReplyResponseDto;
-import com.sparta.springhomework.domain.dto.ReplyUpdateRequestDto;
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Reply;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.domain.request.ReplyCreateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyUpdateRequestDto;
+import com.sparta.springhomework.domain.response.ReplyResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.CommentRepository;
 import com.sparta.springhomework.repository.PostingRepository;
@@ -16,7 +16,6 @@ import com.sparta.springhomework.service.ReplyService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +50,8 @@ public class ReplyServiceImpl implements ReplyService {
   public List<ReplyResponseDto> get(Long id) {
     Comment comment = commentRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
-
-    Set<Reply> replies = comment.getReplies();
+//TODO
+    List<Reply> replies = comment.getReplies();
 
     List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
 

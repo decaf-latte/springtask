@@ -1,13 +1,13 @@
 package com.sparta.springhomework.controller;
 
-import com.sparta.springhomework.domain.dto.PostingDetailResponseDto;
-import com.sparta.springhomework.domain.dto.PostingListResponseDto;
-import com.sparta.springhomework.domain.dto.PostingRequestDto;
-import com.sparta.springhomework.domain.dto.PostingResponseDto;
-import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.domain.request.PostingRequestDto;
+import com.sparta.springhomework.domain.response.PostingDetailResponseDto;
+import com.sparta.springhomework.domain.response.PostingListResponseDto;
+import com.sparta.springhomework.domain.response.PostingResponseDto;
+import com.sparta.springhomework.domain.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.service.PostingService;
 import java.util.List;

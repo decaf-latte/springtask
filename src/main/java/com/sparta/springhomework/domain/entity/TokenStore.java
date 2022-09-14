@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class TokenStore extends Timestamped {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @OneToOne(fetch = FetchType.LAZY)

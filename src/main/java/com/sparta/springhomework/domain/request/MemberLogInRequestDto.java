@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.request;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;

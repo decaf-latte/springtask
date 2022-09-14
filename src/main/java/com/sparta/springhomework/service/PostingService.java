@@ -1,11 +1,11 @@
 package com.sparta.springhomework.service;
 
-import com.sparta.springhomework.domain.dto.PostingDetailResponseDto;
-import com.sparta.springhomework.domain.dto.PostingListResponseDto;
-import com.sparta.springhomework.domain.dto.PostingRequestDto;
-import com.sparta.springhomework.domain.dto.PostingResponseDto;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
+import com.sparta.springhomework.domain.request.PostingRequestDto;
+import com.sparta.springhomework.domain.response.PostingDetailResponseDto;
+import com.sparta.springhomework.domain.response.PostingListResponseDto;
+import com.sparta.springhomework.domain.response.PostingResponseDto;
 import java.util.List;
 
 public interface PostingService {

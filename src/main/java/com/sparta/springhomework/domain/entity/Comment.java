@@ -1,10 +1,10 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.dto.CommentCreateRequestDto;
-import com.sparta.springhomework.domain.dto.CommentUpdateRequestDto;
-import java.util.HashSet;
-import java.util.Set;
+import com.sparta.springhomework.domain.request.CommentCreateRequestDto;
+import com.sparta.springhomework.domain.request.CommentUpdateRequestDto;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Comment extends Timestamped {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(columnDefinition = "TEXT") // DB의 컬럼 속성을 TEXT로 바꿔서 기본 varchar 보다 많은 데이터를 저장
@@ -41,8 +41,9 @@ public class Comment extends Timestamped {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
-  private Set<Reply> replies = new HashSet<>();
+  //TODO
+  @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE) //orphanRemoval = true)
+  private List<Reply> replies = new ArrayList<>();
 
   public Comment(CommentCreateRequestDto commentRequestDto, Posting posting, Member member) {
     this.author = member.getNickname();

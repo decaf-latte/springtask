@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.dto;
+package com.sparta.springhomework.domain.response;
 
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class ResponseDto<T> {
     this.data = data;
     this.error = null;
   }
-  
+
 
   @Getter
   public static class Error {

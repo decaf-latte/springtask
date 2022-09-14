@@ -1,8 +1,8 @@
 package com.sparta.springhomework.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.springhomework.domain.dto.ResponseDto;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.domain.response.ResponseDto;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,14 +1,14 @@
 package com.sparta.springhomework.service.impl;
 
-import com.sparta.springhomework.domain.dto.MemberLogInRequestDto;
-import com.sparta.springhomework.domain.dto.MemberLogInResponseDto;
-import com.sparta.springhomework.domain.dto.MemberSignUpRequestDto;
-import com.sparta.springhomework.domain.dto.MemberSignUpResponseDto;
-import com.sparta.springhomework.domain.dto.ResponseDto;
-import com.sparta.springhomework.domain.dto.TokenDto;
+import com.sparta.springhomework.domain.TokenDto;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.enums.Authority;
 import com.sparta.springhomework.domain.enums.ErrorCode;
+import com.sparta.springhomework.domain.request.MemberLogInRequestDto;
+import com.sparta.springhomework.domain.request.MemberSignUpRequestDto;
+import com.sparta.springhomework.domain.response.MemberLogInResponseDto;
+import com.sparta.springhomework.domain.response.MemberSignUpResponseDto;
+import com.sparta.springhomework.domain.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.jwt.TokenProvider;
 import com.sparta.springhomework.repository.MemberRepository;

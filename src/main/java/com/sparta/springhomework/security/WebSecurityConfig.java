@@ -65,6 +65,9 @@ public class WebSecurityConfig {
         .antMatchers(HttpMethod.GET, "/api/post/{id}").permitAll()
         .antMatchers(HttpMethod.GET, "/api/comment/{id}").permitAll()
         .antMatchers(HttpMethod.GET, "/api/reply/{id}").permitAll()
+        .antMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**", "/swagger/**")
+        .permitAll()
+        .antMatchers("/swagger-resources/**").permitAll()
         .anyRequest().hasRole("USER"); // ROLE_USER를 안 넣고 ROLE_ 을 빼고 넣어야한다.
 //        .anyRequest().permitAll(); // 권한 체크를 안 함/ 토큰 확인은 함
 //        .antMatchers("/api/**").hasRole("ROLE_USER"); // /api/**에 접근하기 위해서는 ROLE_USER의 권한을 가진 유저만 접근 가능하다.
