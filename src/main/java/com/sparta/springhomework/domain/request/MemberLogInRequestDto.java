@@ -10,6 +10,7 @@ public class MemberLogInRequestDto {
 
   @NotBlank
   private String nickname;
+
   @NotBlank
   private String password;
 

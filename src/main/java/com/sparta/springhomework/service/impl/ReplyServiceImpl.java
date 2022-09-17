@@ -5,8 +5,7 @@ import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Reply;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.ReplyCreateRequestDto;
-import com.sparta.springhomework.domain.request.ReplyUpdateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyRequestDto;
 import com.sparta.springhomework.domain.response.ReplyResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.CommentRepository;
@@ -34,7 +33,7 @@ public class ReplyServiceImpl implements ReplyService {
   //대댓글 작성
   @Override
   @Transactional
-  public ReplyResponseDto create(ReplyCreateRequestDto replyRequestDto, Comment comment) {
+  public ReplyResponseDto create(ReplyRequestDto replyRequestDto, Comment comment) {
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
 
@@ -64,7 +63,7 @@ public class ReplyServiceImpl implements ReplyService {
 
   //대댓글 수정
   @Override
-  public ReplyResponseDto update(Long id, ReplyUpdateRequestDto replyUpdateRequestDto,
+  public ReplyResponseDto update(Long id, ReplyRequestDto replyRequestDto,
       Comment comment) {
     Reply reply = replyRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
@@ -77,7 +76,7 @@ public class ReplyServiceImpl implements ReplyService {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
 
-    reply.update(replyUpdateRequestDto, comment);
+    reply.update(replyRequestDto, comment);
     return new ReplyResponseDto(reply);
   }
 

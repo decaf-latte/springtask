@@ -11,19 +11,19 @@ import lombok.Getter;
 @Getter
 public class PostingDetailResponseDto extends Timestamped {
 
-  private Long id;
-  private String title;
-  private String content;
+  private final Long id;
+  private final String title;
+  private final String content;
 
-  private LocalDateTime createdAt;
+  private final LocalDateTime createdAt;
 
-  private LocalDateTime modifiedAt;
+  private final LocalDateTime modifiedAt;
 
-  private MemberResponseDto member;
+  private final MemberResponseDto member;
 
-  private List<CommentResponseDto> comments = new ArrayList<>();
+  private final List<CommentResponseDto> comments = new ArrayList<>();
 
-  private List<ReplyResponseDto> replies = new ArrayList<>();
+  private final List<ReplyResponseDto> replies = new ArrayList<>();
 
   public PostingDetailResponseDto(Posting posting) {
     this.createdAt = posting.getCreatedAt();

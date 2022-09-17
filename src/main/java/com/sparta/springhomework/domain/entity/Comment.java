@@ -1,8 +1,7 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.request.CommentCreateRequestDto;
-import com.sparta.springhomework.domain.request.CommentUpdateRequestDto;
+import com.sparta.springhomework.domain.request.CommentRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -45,7 +44,7 @@ public class Comment extends Timestamped {
   @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE) //orphanRemoval = true)
   private List<Reply> replies = new ArrayList<>();
 
-  public Comment(CommentCreateRequestDto commentRequestDto, Posting posting, Member member) {
+  public Comment(CommentRequestDto commentRequestDto, Posting posting, Member member) {
     this.author = member.getNickname();
     this.content = commentRequestDto.getContent();
     this.posting = posting;
@@ -53,8 +52,8 @@ public class Comment extends Timestamped {
   }
 
   // update이므로 생성자가 아닌 일반 메소드를 이용한다.
-  public void update(CommentUpdateRequestDto commentUpdateRequestDto, Posting posting) {
-    this.content = commentUpdateRequestDto.getContent();
+  public void update(CommentRequestDto commentRequestDto, Posting posting) {
+    this.content = commentRequestDto.getContent();
     this.posting = posting;
   }
 

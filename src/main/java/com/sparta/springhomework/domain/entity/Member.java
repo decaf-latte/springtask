@@ -16,14 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode
 @Table(name = "member")
 public class Member extends Timestamped {
 
@@ -39,7 +37,7 @@ public class Member extends Timestamped {
 
   @Enumerated(EnumType.STRING)
   private Authority authority;
-  //TODO->아예 주석처리 둘다
+
   @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Posting> postings = new ArrayList<>();
 

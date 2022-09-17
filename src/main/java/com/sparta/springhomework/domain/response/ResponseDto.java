@@ -10,16 +10,6 @@ public class ResponseDto<T> {
   T data;
   Error error;
 
-//    public ResponseDto(boolean success, T data) {
-//        this.success = success;
-//        this.data = data;
-//    }
-//    public ResponseDto(boolean success, T data, ErrorCode errorCode) {
-//        this.success = success;
-//        this.data = data;
-//        this.error = new Error(errorCode);
-//    }
-
   public ResponseDto(T data, ErrorCode errorCode) {
     if (data != null) {
       this.success = true;
@@ -37,7 +27,6 @@ public class ResponseDto<T> {
     this.data = data;
     this.error = null;
   }
-
 
   @Getter
   public static class Error {

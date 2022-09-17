@@ -12,18 +12,18 @@ import lombok.Getter;
 
 public class PostingResponseDto extends Timestamped {
 
-  private Long id;
-  private String title;
-  private String content;
-  private String author;
+  private final Long id;
+  private final String title;
+  private final String content;
+  private final String author;
 
-  private LocalDateTime createdAt;
+  private final LocalDateTime createdAt;
 
-  private LocalDateTime modifiedAt;
+  private final LocalDateTime modifiedAt;
 
-  private MemberResponseDto member;
+  private final MemberResponseDto member;
 
-  private List<CommentResponseDto> comments = new ArrayList<>();
+  private final List<CommentResponseDto> comments = new ArrayList<>();
 
 
   public PostingResponseDto(Posting posting) {

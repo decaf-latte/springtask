@@ -18,9 +18,9 @@ public class PostingListResponseDto {
   private String content;
   private MemberResponseDto member;
 
-  private List<CommentResponseDto> comments = new ArrayList<>();
+  private final List<CommentResponseDto> comments = new ArrayList<>();
 
-  private List<ReplyResponseDto> replies = new ArrayList<>();
+  private final List<ReplyResponseDto> replies = new ArrayList<>();
 
   public PostingListResponseDto(Posting posting) {
     this.id = posting.getId();

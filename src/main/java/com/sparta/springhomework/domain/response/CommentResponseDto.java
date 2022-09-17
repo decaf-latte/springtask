@@ -10,15 +10,15 @@ import lombok.Getter;
 @Getter
 public class CommentResponseDto {
 
-  private Long id;
+  private final Long id;
 
-  private Long postId;
-  private String author;
-  private String content;
-  private LocalDateTime createdAt;
-  private LocalDateTime modifiedAt;
+  private final Long postId;
+  private final String author;
+  private final String content;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime modifiedAt;
 
-  private List<ReplyResponseDto> replies = new ArrayList<>();
+  private final List<ReplyResponseDto> replies = new ArrayList<>();
 
 
   public CommentResponseDto(Comment comment) {

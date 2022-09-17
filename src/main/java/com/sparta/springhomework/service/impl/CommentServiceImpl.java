@@ -5,8 +5,7 @@ import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.CommentCreateRequestDto;
-import com.sparta.springhomework.domain.request.CommentUpdateRequestDto;
+import com.sparta.springhomework.domain.request.CommentRequestDto;
 import com.sparta.springhomework.domain.response.CommentResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.CommentRepository;
@@ -34,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
   //댓글 작성
   @Override
   @Transactional
-  public CommentResponseDto create(CommentCreateRequestDto commentRequestDto,
+  public CommentResponseDto create(CommentRequestDto commentRequestDto,
       Posting posting) {
     UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
         .getAuthentication().getPrincipal();
@@ -68,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
   //댓글 수정
   @Override
   @Transactional
-  public CommentResponseDto update(Long id, CommentUpdateRequestDto commentUpdateRequestDto,
+  public CommentResponseDto update(Long id, CommentRequestDto commentRequestDto,
       Posting posting) {
     Comment comment = commentRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
@@ -81,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
 
-    comment.update(commentUpdateRequestDto, posting);
+    comment.update(commentRequestDto, posting);
     return new CommentResponseDto(comment);
   }
 

@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class MemberSignUpResponseDto {
 
-  private Long id;
-  private String nickname;
-  private LocalDateTime createdAt;
-  private LocalDateTime modifiedAt;
+  private final Long id;
+  private final String nickname;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime modifiedAt;
 
   public MemberSignUpResponseDto(Member member) {
     this.id = member.getId();

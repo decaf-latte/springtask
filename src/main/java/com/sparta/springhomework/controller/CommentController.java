@@ -3,8 +3,7 @@ package com.sparta.springhomework.controller;
 
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.CommentCreateRequestDto;
-import com.sparta.springhomework.domain.request.CommentUpdateRequestDto;
+import com.sparta.springhomework.domain.request.CommentRequestDto;
 import com.sparta.springhomework.domain.response.CommentResponseDto;
 import com.sparta.springhomework.domain.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
@@ -33,7 +32,7 @@ public class CommentController {
   //댓글작성
   @PostMapping("/api/auth/comment")
   public ResponseDto<CommentResponseDto> create(
-      @RequestBody CommentCreateRequestDto commentRequestDto) {
+      @RequestBody CommentRequestDto commentRequestDto) {
     CommentResponseDto commentResponseDto;
     try {
 
@@ -70,12 +69,12 @@ public class CommentController {
   @Transactional
   @PutMapping("/api/auth/comment/{id}")
   public ResponseDto<CommentResponseDto> update(@PathVariable Long id,
-      @RequestBody CommentUpdateRequestDto commentUpdateRequestDto) {
+      @RequestBody CommentRequestDto commentRequestDto) {
     CommentResponseDto commentResponseDto;
 
     try {
-      Posting posting = postingService.findById(commentUpdateRequestDto.getPostId());
-      commentResponseDto = commentService.update(id, commentUpdateRequestDto, posting);
+      Posting posting = postingService.findById(commentRequestDto.getPostId());
+      commentResponseDto = commentService.update(id, commentRequestDto, posting);
 
     } catch (CustomException e) {
       log.error(e.getMessage());

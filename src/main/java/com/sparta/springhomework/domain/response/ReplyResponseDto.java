@@ -8,17 +8,17 @@ import lombok.Getter;
 @Getter
 public class ReplyResponseDto {
 
-  private Long id;
+  private final Long id;
 
-  private Long commentId;
+  private final Long commentId;
 
-  private String author;
+  private final String author;
 
-  private String content;
+  private final String content;
 
-  private LocalDateTime createdAt;
+  private final LocalDateTime createdAt;
 
-  private LocalDateTime modifiedAt;
+  private final LocalDateTime modifiedAt;
 
 
   public ReplyResponseDto(Reply reply) {

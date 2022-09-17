@@ -3,8 +3,7 @@ package com.sparta.springhomework.controller;
 
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.ReplyCreateRequestDto;
-import com.sparta.springhomework.domain.request.ReplyUpdateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyRequestDto;
 import com.sparta.springhomework.domain.response.ReplyResponseDto;
 import com.sparta.springhomework.domain.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
@@ -34,7 +33,7 @@ public class ReplyController {
 
   //대댓글 작성
   @PostMapping("/api/auth/reply")
-  public ResponseDto<ReplyResponseDto> create(@RequestBody ReplyCreateRequestDto replyRequestDto) {
+  public ResponseDto<ReplyResponseDto> create(@RequestBody ReplyRequestDto replyRequestDto) {
     ReplyResponseDto replyResponseDto;
     try {
 
@@ -70,11 +69,11 @@ public class ReplyController {
   @Transactional
   @PutMapping("/api/auth/reply/{id}")//comment_id
   public ResponseDto<ReplyResponseDto> update(@PathVariable Long id,
-      @RequestBody ReplyUpdateRequestDto replyUpdateRequestDto) {
+      @RequestBody ReplyRequestDto replyRequestDto) {
     ReplyResponseDto replyResponseDto;
     try {
-      Comment comment = commentService.findById(replyUpdateRequestDto.getCommentId());
-      replyResponseDto = replyService.update(id, replyUpdateRequestDto, comment);
+      Comment comment = commentService.findById(replyRequestDto.getCommentId());
+      replyResponseDto = replyService.update(id, replyRequestDto, comment);
     } catch (CustomException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, e.getErrorCode());

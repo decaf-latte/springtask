@@ -10,6 +10,7 @@ public class MemberSignUpRequestDto {
 
   private String nickname;
   private String password;
+
   private String passwordConfirm;
 
   public void setPassword(String password) {

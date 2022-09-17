@@ -4,7 +4,7 @@ package com.sparta.springhomework.domain.request;
 import lombok.Getter;
 
 @Getter
-public class ReplyCreateRequestDto {
+public class ReplyRequestDto {
 
   private Long commentId;
   private String content;

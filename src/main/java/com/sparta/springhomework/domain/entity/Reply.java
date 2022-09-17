@@ -1,8 +1,7 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.request.ReplyCreateRequestDto;
-import com.sparta.springhomework.domain.request.ReplyUpdateRequestDto;
+import com.sparta.springhomework.domain.request.ReplyRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,16 +40,15 @@ public class Reply extends Timestamped {
   private Posting posting;
 
 
-  public Reply(ReplyCreateRequestDto replyRequestDto, Comment comment, Member member) {
+  public Reply(ReplyRequestDto replyRequestDto, Comment comment, Member member) {
     this.author = member.getNickname();
     this.content = replyRequestDto.getContent();
     this.comment = comment;
     this.member = member;
   }
 
-  public void update(ReplyUpdateRequestDto replyUpdateRequestDto, Comment comment) {
-    this.content = replyUpdateRequestDto.getContent();
-    this.posting = posting;
+  public void update(ReplyRequestDto replyRequestDto, Comment comment) {
+    this.content = replyRequestDto.getContent();
   }
 
 }
