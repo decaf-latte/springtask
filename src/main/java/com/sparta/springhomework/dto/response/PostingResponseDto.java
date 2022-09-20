@@ -1,6 +1,6 @@
-package com.sparta.springhomework.domain.response;
+package com.sparta.springhomework.dto.response;
 
-import com.sparta.springhomework.domain.entity.Comment;
+
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.entity.Timestamped;
 import java.time.LocalDateTime;
@@ -9,11 +9,13 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class PostingDetailResponseDto extends Timestamped {
+
+public class PostingResponseDto extends Timestamped {
 
   private final Long id;
   private final String title;
   private final String content;
+  private final String author;
 
   private final LocalDateTime createdAt;
 
@@ -23,21 +25,14 @@ public class PostingDetailResponseDto extends Timestamped {
 
   private final List<CommentResponseDto> comments = new ArrayList<>();
 
-  private final List<ReplyResponseDto> replies = new ArrayList<>();
 
-  public PostingDetailResponseDto(Posting posting) {
-    this.createdAt = posting.getCreatedAt();
-    this.modifiedAt = posting.getModifiedAt();
-
+  public PostingResponseDto(Posting posting) {
     this.id = posting.getId();
     this.title = posting.getTitle();
     this.content = posting.getContent();
+    this.author = posting.getMember().getNickname();
     this.member = new MemberResponseDto(posting.getMember());
-
-    // commentResponseDto를 받아온다
-    for (Comment comment : posting.getComments()) {
-      CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
-      comments.add(commentResponseDto);
-    }
+    this.createdAt = posting.getCreatedAt();
+    this.modifiedAt = posting.getModifiedAt();
   }
 }

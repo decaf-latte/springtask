@@ -2,11 +2,11 @@ package com.sparta.springhomework.controller;
 
 
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.MemberLogInRequestDto;
-import com.sparta.springhomework.domain.request.MemberSignUpRequestDto;
-import com.sparta.springhomework.domain.response.MemberLogInResponseDto;
-import com.sparta.springhomework.domain.response.MemberSignUpResponseDto;
-import com.sparta.springhomework.domain.response.ResponseDto;
+import com.sparta.springhomework.dto.request.MemberLogInRequestDto;
+import com.sparta.springhomework.dto.request.MemberSignUpRequestDto;
+import com.sparta.springhomework.dto.response.MemberLogInResponseDto;
+import com.sparta.springhomework.dto.response.MemberSignUpResponseDto;
+import com.sparta.springhomework.dto.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.repository.MemberRepository;
 import com.sparta.springhomework.service.MemberService;

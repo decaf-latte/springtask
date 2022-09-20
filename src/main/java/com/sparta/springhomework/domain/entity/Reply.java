@@ -1,7 +1,7 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.request.ReplyRequestDto;
+import com.sparta.springhomework.dto.request.ReplyRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

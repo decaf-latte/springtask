@@ -1,28 +1,34 @@
-package com.sparta.springhomework.domain.response;
+package com.sparta.springhomework.dto.response;
 
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Posting;
+import com.sparta.springhomework.domain.entity.Timestamped;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 
 @Getter
-@NoArgsConstructor
-//@AllArgsConstructor
-public class PostingListResponseDto {
+public class PostingDetailResponseDto extends Timestamped {
 
-  private Long id;
-  private String title;
-  private String content;
-  private MemberResponseDto member;
+  private final Long id;
+  private final String title;
+  private final String content;
+
+  private final LocalDateTime createdAt;
+
+  private final LocalDateTime modifiedAt;
+
+  private final MemberResponseDto member;
 
   private final List<CommentResponseDto> comments = new ArrayList<>();
 
   private final List<ReplyResponseDto> replies = new ArrayList<>();
 
-  public PostingListResponseDto(Posting posting) {
+  public PostingDetailResponseDto(Posting posting) {
+    this.createdAt = posting.getCreatedAt();
+    this.modifiedAt = posting.getModifiedAt();
+
     this.id = posting.getId();
     this.title = posting.getTitle();
     this.content = posting.getContent();
@@ -33,6 +39,5 @@ public class PostingListResponseDto {
       CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
       comments.add(commentResponseDto);
     }
-
   }
 }

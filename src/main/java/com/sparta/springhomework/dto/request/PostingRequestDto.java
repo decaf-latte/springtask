@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.request;
+package com.sparta.springhomework.dto.request;
 
 import lombok.Getter;
 

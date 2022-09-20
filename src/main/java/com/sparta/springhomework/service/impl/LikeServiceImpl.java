@@ -3,7 +3,7 @@ package com.sparta.springhomework.service.impl;
 import com.sparta.springhomework.domain.entity.LikePost;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
-import com.sparta.springhomework.domain.response.ResponseDto;
+import com.sparta.springhomework.dto.response.ResponseDto;
 import com.sparta.springhomework.jwt.TokenProvider;
 import com.sparta.springhomework.repository.CommentRepository;
 import com.sparta.springhomework.repository.LikePostingRepository;

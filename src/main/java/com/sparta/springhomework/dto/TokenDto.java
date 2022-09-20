@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain;
+package com.sparta.springhomework.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

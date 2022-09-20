@@ -2,7 +2,7 @@ package com.sparta.springhomework.domain.entity;
 
 
 import com.sparta.springhomework.domain.enums.Authority;
-import com.sparta.springhomework.domain.request.MemberSignUpRequestDto;
+import com.sparta.springhomework.dto.request.MemberSignUpRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;

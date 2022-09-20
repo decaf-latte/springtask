@@ -2,8 +2,8 @@ package com.sparta.springhomework.service;
 
 import com.sparta.springhomework.domain.entity.Comment;
 import com.sparta.springhomework.domain.entity.Posting;
-import com.sparta.springhomework.domain.request.CommentRequestDto;
-import com.sparta.springhomework.domain.response.CommentResponseDto;
+import com.sparta.springhomework.dto.request.CommentRequestDto;
+import com.sparta.springhomework.dto.response.CommentResponseDto;
 import java.util.List;
 
 public interface CommentService {

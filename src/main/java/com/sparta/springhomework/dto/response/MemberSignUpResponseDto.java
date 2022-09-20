@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.response;
+package com.sparta.springhomework.dto.response;
 
 import com.sparta.springhomework.domain.entity.Member;
 import java.time.LocalDateTime;

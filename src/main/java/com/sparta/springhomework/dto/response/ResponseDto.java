@@ -1,4 +1,4 @@
-package com.sparta.springhomework.domain.response;
+package com.sparta.springhomework.dto.response;
 
 import com.sparta.springhomework.domain.enums.ErrorCode;
 import lombok.Getter;

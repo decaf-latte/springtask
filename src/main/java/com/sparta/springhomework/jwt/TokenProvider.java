@@ -1,11 +1,11 @@
 package com.sparta.springhomework.jwt;
 
-import com.sparta.springhomework.domain.TokenDto;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.TokenStore;
 import com.sparta.springhomework.domain.entity.UserDetailsImpl;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.response.ResponseDto;
+import com.sparta.springhomework.dto.TokenDto;
+import com.sparta.springhomework.dto.response.ResponseDto;
 import com.sparta.springhomework.repository.TokenStoreRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

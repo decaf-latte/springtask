@@ -1,7 +1,7 @@
 package com.sparta.springhomework.domain.entity;
 
 
-import com.sparta.springhomework.domain.request.CommentRequestDto;
+import com.sparta.springhomework.dto.request.CommentRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;

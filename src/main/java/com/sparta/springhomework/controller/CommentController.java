@@ -3,9 +3,9 @@ package com.sparta.springhomework.controller;
 
 import com.sparta.springhomework.domain.entity.Posting;
 import com.sparta.springhomework.domain.enums.ErrorCode;
-import com.sparta.springhomework.domain.request.CommentRequestDto;
-import com.sparta.springhomework.domain.response.CommentResponseDto;
-import com.sparta.springhomework.domain.response.ResponseDto;
+import com.sparta.springhomework.dto.request.CommentRequestDto;
+import com.sparta.springhomework.dto.response.CommentResponseDto;
+import com.sparta.springhomework.dto.response.ResponseDto;
 import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.service.CommentService;
 import com.sparta.springhomework.service.PostingService;
