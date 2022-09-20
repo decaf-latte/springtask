@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
   ENTITY_NOT_FOUND("NOT_FOUND", "데이터가 존재하지 않습니다."),
-  
+
   POSTING_ID_NOT_FOUND("POSTING_ID_NOT_FOUND", "게시글이 존재하지 않습니다."),
   COMMENT_NOT_FOUND("COMMENT_NOT_FOUND", "댓글이 존재하지 않습니다."),
   INVALID_ERROR("INVALID_ERROR", "에러 발생"),
@@ -19,7 +19,7 @@ public enum ErrorCode {
   BAD_TOKEN("BAD_TOKEN", "잘못된 토큰 정보입니다."),
   EXPIRED_TOKEN("EXPIRED_TOKEN", "만료된 JWT 토큰입니다."),
   WRONG_TOKEN("WRONG_TOKEN", "지원되지 않는 JWT 토큰입니다."),
-  NOT_SAME_AUTHORITY("  NOT_SAME_AUTHORITY", "권한이 일치하지 않습니다"),
+  NOT_SAME_AUTHORITY("NOT_SAME_AUTHORITY", "권한이 일치하지 않습니다"),
   NOT_SAME_MEMBER("NOT_SAME_MEMBER", "해당 작성자만 수정이 가능합니다."),
   REQUIRE_AUTHORITY("REQUIRE_AUTHORITY", "필요한 권한이 없습니다.");
 

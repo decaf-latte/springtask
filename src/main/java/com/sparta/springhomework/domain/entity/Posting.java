@@ -37,6 +37,9 @@ public class Posting extends Timestamped {
   @Column(nullable = false)
   private String content;
 
+  @Column(nullable = false)
+  private Long likes;
+
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
@@ -51,6 +54,10 @@ public class Posting extends Timestamped {
   @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)//, orphanRemoval = true)
   private List<Comment> comments = new ArrayList<>();
 
+  @JsonIgnore
+  @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+  private List<LikePost> likePost;
+
   //게시글 작성시
   public Posting(PostingRequestDto postingRequestDto, Member member) {
     this.title = postingRequestDto.getTitle();
@@ -62,6 +69,11 @@ public class Posting extends Timestamped {
   public void update(PostingRequestDto postingRequestDto) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
+  }
+
+  //게시글 좋아요시
+  public void updateLikes(Long likes) {
+    this.likes = likes;
   }
 
 }
