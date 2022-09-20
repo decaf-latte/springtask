@@ -71,7 +71,7 @@ public class Posting extends Timestamped {
     this.content = postingRequestDto.getContent();
   }
 
-  //게시글 좋아요시
+  //게시글 좋아요
   public void updateLikes(Long likes) {
     this.likes = likes;
   }

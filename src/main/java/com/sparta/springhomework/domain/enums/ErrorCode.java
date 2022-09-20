@@ -7,6 +7,9 @@ public enum ErrorCode {
 
   ENTITY_NOT_FOUND("NOT_FOUND", "데이터가 존재하지 않습니다."),
 
+  INVALID_TOKEN("INVALID_TOKEN", "Token이 유효하지 않습니다."),
+  MEMBER_NOT_FOUND("MEMBER_NOT_FOUND", "로그인이 필요합니다."),
+
   POSTING_ID_NOT_FOUND("POSTING_ID_NOT_FOUND", "게시글이 존재하지 않습니다."),
   COMMENT_NOT_FOUND("COMMENT_NOT_FOUND", "댓글이 존재하지 않습니다."),
   INVALID_ERROR("INVALID_ERROR", "에러 발생"),

@@ -96,8 +96,7 @@ public class PostingServiceImpl implements PostingService {
 
   @Override
   public Posting findById(Long id) {
-    Posting posting = postingRepository.findById(id)
+    return postingRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
-    return posting;
   }
 }

@@ -3,15 +3,13 @@ package com.sparta.springhomework.service.impl;
 import com.sparta.springhomework.domain.entity.LikePost;
 import com.sparta.springhomework.domain.entity.Member;
 import com.sparta.springhomework.domain.entity.Posting;
+import com.sparta.springhomework.domain.enums.ErrorCode;
 import com.sparta.springhomework.dto.response.ResponseDto;
+import com.sparta.springhomework.exception.CustomException;
 import com.sparta.springhomework.jwt.TokenProvider;
-import com.sparta.springhomework.repository.CommentRepository;
 import com.sparta.springhomework.repository.LikePostingRepository;
-import com.sparta.springhomework.repository.ReplyRepository;
-import com.sparta.springhomework.service.CommentService;
 import com.sparta.springhomework.service.LikeService;
 import com.sparta.springhomework.service.PostingService;
-import com.sparta.springhomework.service.ReplyService;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,30 +24,27 @@ public class LikeServiceImpl implements LikeService {
   private final LikePostingRepository likePostingRepository;
   private final TokenProvider tokenProvider;
   private final PostingService postingService;
-  private final CommentRepository commentRepository;
-  private final CommentService commentService;
-  private final ReplyRepository replyRepository;
-  private final ReplyService replyService;
+
 
   @Override
   @Transactional
-  public ResponseDto<?> togglePostLike(Long postId, HttpServletRequest request) {
+  public ResponseDto<String> togglePostLike(Long postId, HttpServletRequest request) {
     if (null == request.getHeader("Refresh-Token")) {
-      return ResponseDto.fail("MEMBER_NOT_FOUND", "로그인이 필요합니다.");
+      throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
     if (null == request.getHeader("Authorization")) {
-      return ResponseDto.fail("MEMBER_NOT_FOUND", "로그인이 필요합니다.");
+      throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
     Member member = validateMember(request);
     if (null == member) {
-      return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
+      throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
-    Posting post = postingService.isPresentPost(postId);
+    Posting post = postingService.findById(postId);
     if (null == post) {
-      return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
+      throw new CustomException(ErrorCode.POSTING_ID_NOT_FOUND);
     }
 
     LikePost checkLike = likePostingRepository.findByPostIdAndMemberId(post.getId(),
@@ -71,9 +66,9 @@ public class LikeServiceImpl implements LikeService {
     post.updateLikes(likes);
 
     if (checkLike == null) {
-      return ResponseDto.success("like post success");
+      return new ResponseDto("like post success");
     } else {
-      return ResponseDto.success("like post cancel");
+      return new ResponseDto("Unlike post");
     }
 
   }
