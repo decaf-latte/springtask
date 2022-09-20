@@ -28,7 +28,7 @@ public class LikeServiceImpl implements LikeService {
 
   @Override
   @Transactional
-  public ResponseDto<String> togglePostLike(Long postId, HttpServletRequest request) {
+  public ResponseDto<String> togglePostLike(Long id, HttpServletRequest request) {
     if (null == request.getHeader("Refresh-Token")) {
       throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
     }
@@ -42,13 +42,12 @@ public class LikeServiceImpl implements LikeService {
       throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
-    Posting post = postingService.findById(postId);
+    Posting post = postingService.findById(id);
     if (null == post) {
       throw new CustomException(ErrorCode.POSTING_ID_NOT_FOUND);
     }
 
-    LikePost checkLike = likePostingRepository.findByPostIdAndMemberId(post.getId(),
-        member.getId());
+    LikePost checkLike = likePostingRepository.findByPostingAndMember(post, member);
     if (checkLike == null) {
       // like 등록
       LikePost likePost = LikePost.builder()
@@ -62,7 +61,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     // 해당 게시물 likes 업데이트
-    Long likes = likePostingRepository.countAllByPostId(post.getId());
+    Long likes = likePostingRepository.countAllByPosting(post);
     post.updateLikes(likes);
 
     if (checkLike == null) {

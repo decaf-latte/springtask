@@ -40,7 +40,6 @@ public class Posting extends Timestamped {
   @Column(nullable = false)
   private Long likes;
 
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private Member member;
@@ -55,7 +54,7 @@ public class Posting extends Timestamped {
   private List<Comment> comments = new ArrayList<>();
 
   @JsonIgnore
-  @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
   private List<LikePost> likePost;
 
   //게시글 작성시
@@ -63,6 +62,7 @@ public class Posting extends Timestamped {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
     this.member = member;
+    this.likes = 0L;
   }
 
   //게시글 수정시

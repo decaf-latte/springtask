@@ -15,6 +15,8 @@ public class PostingDetailResponseDto extends Timestamped {
   private final String title;
   private final String content;
 
+  private Long likes;
+
   private final LocalDateTime createdAt;
 
   private final LocalDateTime modifiedAt;
@@ -33,6 +35,8 @@ public class PostingDetailResponseDto extends Timestamped {
     this.title = posting.getTitle();
     this.content = posting.getContent();
     this.member = new MemberResponseDto(posting.getMember());
+
+    this.likes = posting.getLikes();
 
     // commentResponseDto를 받아온다
     for (Comment comment : posting.getComments()) {

@@ -16,6 +16,8 @@ public class PostingListResponseDto {
   private Long id;
   private String title;
   private String content;
+
+  private Long likes;
   private MemberResponseDto member;
 
   private final List<CommentResponseDto> comments = new ArrayList<>();

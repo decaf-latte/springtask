@@ -23,11 +23,11 @@ public class LikePost {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @JoinColumn(name = "member_id", nullable = false)
+  //  @JoinColumn(name = "member_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private Member member;
 
-  @JoinColumn(name = "post_id", nullable = false)
+  @JoinColumn(name = "posting_Id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
   private Posting posting;
 
