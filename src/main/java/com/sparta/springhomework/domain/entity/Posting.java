@@ -37,6 +37,9 @@ public class Posting extends Timestamped {
   @Column(nullable = false)
   private String content;
 
+  @Column
+  private String postImg;
+
   @Column(nullable = false)
   private Long likes;
 
@@ -58,10 +61,11 @@ public class Posting extends Timestamped {
   private List<LikePost> likePost;
 
   //게시글 작성시
-  public Posting(PostingRequestDto postingRequestDto, Member member) {
+  public Posting(PostingRequestDto postingRequestDto, Member member, String postImg) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
     this.member = member;
+    this.postImg = postImg;
     this.likes = 0L;
   }
 
@@ -69,6 +73,7 @@ public class Posting extends Timestamped {
   public void update(PostingRequestDto postingRequestDto) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
+    //   this.postImg = postImg;
   }
 
   //게시글 좋아요

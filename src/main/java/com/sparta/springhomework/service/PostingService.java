@@ -7,12 +7,15 @@ import com.sparta.springhomework.dto.response.PostingDetailResponseDto;
 import com.sparta.springhomework.dto.response.PostingListResponseDto;
 import com.sparta.springhomework.dto.response.PostingResponseDto;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface PostingService {
 
   List<PostingListResponseDto> getAll();
-
-  PostingResponseDto create(PostingRequestDto postingRequestDto, Member member);
+  
+  //게시글 작성
+  PostingResponseDto create(PostingRequestDto postingRequestDto, Member member,
+      MultipartFile image);
 
   PostingDetailResponseDto getPosting(Long id);
 

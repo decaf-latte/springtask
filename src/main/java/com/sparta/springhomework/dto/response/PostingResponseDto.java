@@ -16,7 +16,7 @@ public class PostingResponseDto extends Timestamped {
   private final String title;
   private final String content;
   private final String author;
-
+  private final String postImg;
   private final LocalDateTime createdAt;
 
   private final LocalDateTime modifiedAt;
@@ -30,6 +30,7 @@ public class PostingResponseDto extends Timestamped {
     this.id = posting.getId();
     this.title = posting.getTitle();
     this.content = posting.getContent();
+    this.postImg = posting.getPostImg();
     this.author = posting.getMember().getNickname();
     this.member = new MemberResponseDto(posting.getMember());
     this.createdAt = posting.getCreatedAt();

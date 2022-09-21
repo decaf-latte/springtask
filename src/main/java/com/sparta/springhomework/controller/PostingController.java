@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j//에러메세지 로그에 찍기위한것
 @RequiredArgsConstructor//필수
@@ -48,13 +50,14 @@ public class PostingController {
   @PostMapping("/api/auth/post")
   public ResponseDto<PostingResponseDto> create(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody PostingRequestDto postingRequestDto) {
+      @RequestPart("data") PostingRequestDto postingRequestDto,
+      @RequestPart(required = false) MultipartFile image) {
 
     PostingResponseDto postingResponseDto;
 
     try {
       Member member = userDetails.getMember();
-      postingResponseDto = postingService.create(postingRequestDto, member);
+      postingResponseDto = postingService.create(postingRequestDto, member, image);
 
     } catch (Exception e) {
       log.error("error: ", e);

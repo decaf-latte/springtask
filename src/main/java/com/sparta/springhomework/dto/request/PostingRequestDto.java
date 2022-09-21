@@ -11,5 +11,6 @@ public class PostingRequestDto {
 
   private String title;
   private String content;
+  private String postImg;
 
 }
