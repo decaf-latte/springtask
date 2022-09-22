@@ -21,7 +21,7 @@ public class S3Controller {
       return new ResponseDto("파일이 유효하지 않습니다.");
     }
     try {
-      return new ResponseDto(s3Upload.upload(multipartFile, "static"));
+      return new ResponseDto(s3Upload.uploadFiles(multipartFile, "static"));
     } catch (Exception e) {
       e.printStackTrace();
       return new ResponseDto("파일이 유효하지 않습니다.");

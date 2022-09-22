@@ -73,7 +73,16 @@ public class Posting extends Timestamped {
   public void update(PostingRequestDto postingRequestDto) {
     this.title = postingRequestDto.getTitle();
     this.content = postingRequestDto.getContent();
-    //   this.postImg = postImg;
+  }
+
+  //게시글 사진 수정시
+  public void updateImage(String postImg) {
+    this.postImg = postImg;
+  }
+
+  //게시글 사진 삭제 시
+  public void deleteImage(String postImg) {
+    this.postImg = null;
   }
 
   //게시글 좋아요

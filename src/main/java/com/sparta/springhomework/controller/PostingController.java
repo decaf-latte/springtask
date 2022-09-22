@@ -103,11 +103,47 @@ public class PostingController {
     return new ResponseDto<>(postPostingResponseDto);
   }
 
+  @PutMapping("/api/post/{id}/image")
+  public ResponseDto<PostingResponseDto> updatePosting(@PathVariable Long id,
+      @RequestPart(required = false) MultipartFile image) {
+    PostingResponseDto postingResponseDto;
+    try {
+      postingResponseDto = postingService.updateImage(id, image);
+
+    } catch (CustomException e) {//아이디 못찾을때 에러를 미리 지정을 했으므로 해당 에러를 감지하여 먼저 가져옴
+      log.error(e.getMessage());//에러메세지 로그에 띄움
+      return new ResponseDto<>(null, e.getErrorCode());
+
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
+    }
+    return new ResponseDto<>(postingResponseDto);
+  }
+
+
   //게시글 삭제
   @DeleteMapping("/api/post/{id}")//로직 실행 여부를 보는 값이니까 실행이 되었다 아니다만 띄우면됨->결과값을 받아줄 변수가 필요없음.
   public ResponseDto<String> deletePosting(@PathVariable Long id) {
     try {
       postingService.delete(id);
+    } catch (CustomException e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, e.getErrorCode());
+    } catch (Exception e) {
+      log.error(e.getMessage());
+      return new ResponseDto<>(null, ErrorCode.INVALID_ERROR);
+    }
+    String data = "delete success";
+
+    return new ResponseDto<>(data);
+  }
+
+  //게시글 사진 삭제
+  @DeleteMapping("/api/post/{id}/image")
+  public ResponseDto<String> deleteImage(@PathVariable Long id) {
+    try {
+      postingService.deleteImage(id);
     } catch (CustomException e) {
       log.error(e.getMessage());
       return new ResponseDto<>(null, e.getErrorCode());

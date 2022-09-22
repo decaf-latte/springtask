@@ -15,6 +15,8 @@ public class PostingDetailResponseDto extends Timestamped {
   private final String title;
   private final String content;
 
+  private String postImg;
+
   private Long likes;
 
   private final LocalDateTime createdAt;
@@ -34,6 +36,7 @@ public class PostingDetailResponseDto extends Timestamped {
     this.id = posting.getId();
     this.title = posting.getTitle();
     this.content = posting.getContent();
+    this.postImg = posting.getPostImg();
     this.member = new MemberResponseDto(posting.getMember());
 
     this.likes = posting.getLikes();

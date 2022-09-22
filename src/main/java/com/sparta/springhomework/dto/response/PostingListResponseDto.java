@@ -17,6 +17,7 @@ public class PostingListResponseDto {
   private String title;
   private String content;
 
+  private String postImg;
   private Long likes;
   private MemberResponseDto member;
 
@@ -28,6 +29,8 @@ public class PostingListResponseDto {
     this.id = posting.getId();
     this.title = posting.getTitle();
     this.content = posting.getContent();
+    this.postImg = posting.getPostImg();
+    this.likes = posting.getLikes();
     this.member = new MemberResponseDto(posting.getMember());
 
     // commentResponseDto를 받아온다
@@ -35,6 +38,5 @@ public class PostingListResponseDto {
       CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
       comments.add(commentResponseDto);
     }
-
   }
 }

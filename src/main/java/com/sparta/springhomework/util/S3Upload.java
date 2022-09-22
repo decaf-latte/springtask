@@ -1,5 +1,6 @@
 package com.sparta.springhomework.util;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -31,14 +32,14 @@ public class S3Upload {
 
 
   // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-  public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+  public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
     File uploadFile = convert(multipartFile)
         .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
     return upload(uploadFile, dirName);
   }
 
   private String upload(File uploadFile, String dirName) {
-    String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
+    String fileName = dirName + "/" + UUID.randomUUID() + "." + uploadFile.getName();
     String uploadImageUrl = putS3(uploadFile, fileName);
 
     removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)
@@ -64,6 +65,7 @@ public class S3Upload {
     }
   }
 
+  //변환
   private Optional<File> convert(MultipartFile file) throws IOException {
 
     String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -76,5 +78,17 @@ public class S3Upload {
       return Optional.of(convertFile);
     }
     return Optional.empty();
+  }
+
+  // S3 delete file
+  public void fileDelete(String fileName) {
+    log.info("file name : " + fileName); //url
+    log.info("File : " + fileName.substring(54));
+    try {
+      amazonS3Client.deleteObject(this.bucket, fileName.substring(54));
+
+    } catch (AmazonServiceException e) {
+      System.err.println(e.getErrorMessage());
+    }
   }
 }

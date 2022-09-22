@@ -43,9 +43,9 @@ public class PostingServiceImpl implements PostingService {
 
     String postImg = null;
 
-    if (image != null) {
+    if (!image.isEmpty()) {
       try {
-        postImg = s3Upload.upload(image, "images");
+        postImg = s3Upload.uploadFiles(image, "images");
         System.out.println(postImg);
       } catch (IOException e) {
         e.printStackTrace();
@@ -66,7 +66,7 @@ public class PostingServiceImpl implements PostingService {
     return new PostingDetailResponseDto(posting);
   }
 
-  //게시글 수정
+  //게시글만 수정
   @Override
   @Transactional
   public PostingResponseDto update(Long id, PostingRequestDto postingRequestDto) {
@@ -81,10 +81,65 @@ public class PostingServiceImpl implements PostingService {
     if (!Objects.equals(posting.getMember().getId(), currentMember.getId())) {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
-
     posting.update(postingRequestDto);
+
     return new PostingResponseDto(posting);
   }
+
+  //게시글 사진 수정
+  @Override
+  @Transactional
+  public PostingResponseDto updateImage(Long id, MultipartFile image) {
+    Posting posting = postingRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+
+    Member currentMember = userDetails.getMember();
+
+    if (!Objects.equals(posting.getMember().getId(), currentMember.getId())) {
+      throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
+    }
+
+    String postImg = posting.getPostImg();
+
+    if (!image.isEmpty()) {
+      try {
+        s3Upload.fileDelete(postImg);
+        postImg = s3Upload.uploadFiles(image, "images");
+        System.out.println(postImg);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    posting.updateImage(postImg);
+    return new PostingResponseDto(posting);
+  }
+
+  //게시글 사진 삭제
+  @Override
+  @Transactional
+  public void deleteImage(Long id) {
+    Posting posting = postingRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.ENTITY_NOT_FOUND));
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext()
+        .getAuthentication().getPrincipal();
+
+    Member currentMember = userDetails.getMember();
+
+    if (!Objects.equals(posting.getMember().getId(), currentMember.getId())) {
+      throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
+    }
+    String postImg = posting.getPostImg(); // 객체url
+
+    posting.deleteImage(postImg);//db에서 null로 바꿔줌
+    s3Upload.fileDelete(postImg);//S3에서 사진 삭제
+
+
+  }
+
 
   //게시글 삭제
   @Override
@@ -101,6 +156,9 @@ public class PostingServiceImpl implements PostingService {
     if (!Objects.equals(posting.getMember().getId(), currentMember.getId())) {
       throw new CustomException(ErrorCode.NOT_SAME_MEMBER);
     }
+    String postImg = posting.getPostImg(); // 객체url
+
+    s3Upload.fileDelete(postImg);//사진도 S3에서 같이 삭제
     postingRepository.deleteById(id);
   }
 
